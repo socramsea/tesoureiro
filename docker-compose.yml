@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: tesoureiro
+      POSTGRES_PASSWORD: tesoureiro
+      POSTGRES_DB: tesoureiro
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tesoureiro"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: .
+    env_file: .env
+    ports:
+      - "127.0.0.1:8082:8080"   # atrás do Caddy/Traefik no VPS
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: uvicorn tesoureiro.api.app:app --host 0.0.0.0 --port 8080
+
+volumes:
+  pgdata:
