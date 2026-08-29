@@ -104,7 +104,8 @@ def verificar_sancoes(cnpj: str, api_key: str) -> dict:
         "sancionado": sancionado,
         "ceis": ceis,
         "cnep": cnep,
-        "recomendacao": ("BLOQUEAR pagamento e escalar para humano — fornecedor consta em "
-                         "lista de sanções federal" if sancionado
-                         else "Nenhuma sanção encontrada nas bases CEIS/CNEP."),
+        "recomendacao": ("Fornecedor consta em cadastro público de sanções (CEIS/CNEP) — "
+                         "recomendo confirmar com jurídico/contábil antes de prosseguir "
+                         "com pagamento ou contratação" if sancionado
+                         else "Nenhuma sanção encontrada nas bases CEIS/CNEP nesta consulta."),
     }
